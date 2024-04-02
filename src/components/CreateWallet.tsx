@@ -45,7 +45,7 @@ const CreateWallet = () => {
       <DialogTrigger>
         <Button className="text-lime-500 hover:ring-2 hover:ring-lime-500">Add Wallet +</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="dark text-white">
         <DialogHeader>
           <DialogTitle>Create new wallet</DialogTitle>
           <DialogDescription>

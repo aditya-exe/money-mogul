@@ -27,7 +27,7 @@ const UserAvatar: FC<IUserAvatar> = ({ userName, userImage }) => {
           <AvatarFallback>{userName.charAt(0)}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
+      <DropdownMenuContent className="dark w-56">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>

@@ -74,7 +74,7 @@ const CreateExpense: FC<ICreateExpense> = ({ walletId }) => {
           Add Expense +
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="dark text-white">
         <DialogHeader>
           <DialogTitle>Create new Expense</DialogTitle>
           <DialogDescription>Enter the details of expense</DialogDescription>

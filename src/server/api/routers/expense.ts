@@ -3,6 +3,11 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { expenses, wallets } from "@/server/db/schema";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
+import { db } from "@/server/db";
+
+async function deleteById(expenseId: string) {
+  return await db.delete(expenses).where(eq(expenses.id, expenseId));
+}
 
 export const expenseRouter = createTRPCRouter({
   create: protectedProcedure
@@ -87,5 +92,22 @@ export const expenseRouter = createTRPCRouter({
         .where(eq(expenses.walletId, walletId));
 
       return dbExpenses;
+    }),
+  deleteByIds: protectedProcedure
+    .input(
+      z.object({
+        expenseIds: z.array(z.string()),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const { expenseIds } = input;
+
+      const promises = expenseIds.map((id) => deleteById(id));
+      const results = await Promise.allSettled(promises);
+
+      const errors = results.filter((r) => r.status === "rejected");
+      // const successes = results.filter((r) => r.status === "fulfilled");
+
+      return errors;
     }),
 });
