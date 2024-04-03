@@ -1,7 +1,7 @@
 "use client";
 
 import type { FC } from "react";
-import { Button, buttonVariants } from "./ui/button";
+import { buttonVariants } from "./ui/button";
 import { api } from "@/trpc/react";
 import {
   AlertDialog,
