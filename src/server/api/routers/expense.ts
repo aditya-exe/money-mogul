@@ -6,6 +6,44 @@ import { eq } from "drizzle-orm";
 import { db } from "@/server/db";
 
 async function deleteById(expenseId: string) {
+  const exp = await db.query.expenses.findFirst({
+    where: eq(expenses.id, expenseId),
+  });
+
+  if (!exp) {
+    throw new TRPCError({
+      message: "ERROR: No expense found",
+      code: "BAD_REQUEST",
+    });
+  }
+  // console.log({expenses})
+  const wallet = await db.query.wallets.findFirst({
+    where: eq(wallets.id, exp.walletId),
+  });
+
+  if (!wallet) {
+    throw new TRPCError({
+      message: "ERROR: No wallet Found",
+      code: "BAD_REQUEST",
+    });
+  }
+
+  if (exp.type === "add") {
+    await db
+      .update(wallets)
+      .set({
+        balance: wallet.balance - exp.amount,
+      })
+      .where(eq(wallets.id, exp.walletId));
+  } else if (exp.type === "sub") {
+    await db
+      .update(wallets)
+      .set({
+        balance: wallet.balance + exp.amount,
+      })
+      .where(eq(wallets.id, exp.walletId));
+  }
+
   return await db.delete(expenses).where(eq(expenses.id, expenseId));
 }
 
@@ -33,26 +71,6 @@ export const expenseRouter = createTRPCRouter({
         });
       }
 
-      const expense = (
-        await ctx.db
-          .insert(expenses)
-          .values({
-            name,
-            amount,
-            type,
-            date,
-            walletId,
-          })
-          .returning()
-      ).at(0);
-
-      if (!expense) {
-        throw new TRPCError({
-          message: "ERROR: Failed to create expense",
-          code: "INTERNAL_SERVER_ERROR",
-        });
-      }
-
       if (type === "add") {
         await ctx.db
           .update(wallets)
@@ -73,6 +91,26 @@ export const expenseRouter = createTRPCRouter({
             balance: wallet.balance - amount,
           })
           .where(eq(wallets.id, walletId));
+      }
+
+      const expense = (
+        await ctx.db
+          .insert(expenses)
+          .values({
+            name,
+            amount,
+            type,
+            date,
+            walletId,
+          })
+          .returning()
+      ).at(0);
+
+      if (!expense) {
+        throw new TRPCError({
+          message: "ERROR: Failed to create expense",
+          code: "INTERNAL_SERVER_ERROR",
+        });
       }
 
       return expense;

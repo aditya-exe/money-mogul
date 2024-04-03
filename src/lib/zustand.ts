@@ -1,10 +1,11 @@
-// import { create } from "zustand";
+import { create } from "zustand";
 
-// interface State {
-//   expenseIds: string[]
-// }
+interface State {
+  expenseIds: string[];
+  setExpenseIds: (x: string[]) => void;
+}
 
-// export const zustand = create<State>((set)=>({
-//   expenseIds: [],
-//   setExpenseIds: (newId)=>set((state)=>({expenseIds: [...state.expenseIds, newId]}))
-// }));
+export const zustand = create<State>((set) => ({
+  expenseIds: [],
+  setExpenseIds: (x) => set(() => ({ expenseIds: [...x] })),
+}));

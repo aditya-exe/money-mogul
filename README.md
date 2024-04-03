@@ -9,7 +9,7 @@ I tried many other apps for this none of them had some features that I wanted so
 
 ## What's next? TODOS
 
-- [ ] add global state with zustand
-- [ ] react native support for mobile?
-- [ ] suspense / loading skeleton
+- [ x ] add global state with zustand
 - [ ] some more ui changes(?)
+- [ ] suspense / loading skeleton
+- [ ] react native support for mobile?

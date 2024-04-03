@@ -28,11 +28,11 @@ const Wallet = async ({ params }: { params: { walletId: string } }) => {
       <div className="flex items-center justify-between p-8 text-lime-500">
         <div className="flex items-center gap-x-4">
           <h1 className="text-4xl font-bold italic">{wallet.name}</h1>
+          <DeleteWallet walletId={params.walletId} />
           <CreateExpense walletId={params.walletId} />
-          <DeleteExpense />
         </div>
         <div className="flex items-center gap-x-12">
-          <DeleteWallet walletId={params.walletId} />
+          <DeleteExpense />
           <h1 className="text-4xl italic">{wallet.balance}</h1>
         </div>
       </div>

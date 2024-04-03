@@ -14,6 +14,7 @@ import {
 import { cn } from "@/lib/utils";
 import { type Expense } from "@/server/db/schema";
 import { type CheckedState } from "@radix-ui/react-checkbox";
+import { zustand } from "@/lib/zustand";
 
 interface ITable {
   expenses: Expense[];
@@ -21,8 +22,9 @@ interface ITable {
 
 const ExpenseTable: FC<ITable> = ({ expenses }) => {
   const [isCheckAll, setIsCheckAll] = useState<boolean>(false);
-  const [isCheck, setIsCheck] = useState<string[]>([]);
+  // const [isCheck, setIsCheck] = useState<string[]>([]);
   const [expenseList, setExpenseList] = useState<Expense[]>([]);
+  const { expenseIds, setExpenseIds } = zustand();
 
   useEffect(() => {
     setExpenseList(expenses);
@@ -30,16 +32,16 @@ const ExpenseTable: FC<ITable> = ({ expenses }) => {
 
   function handleSelectAll() {
     setIsCheckAll(!isCheckAll);
-    setIsCheck(expenseList.map((x) => x.id));
+    setExpenseIds(expenseList.map((x) => x.id));
     if (isCheckAll) {
-      setIsCheck([]);
+      setExpenseIds([]);
     }
   }
 
   function handleClick(checked: CheckedState, id: string) {
-    setIsCheck([...isCheck, id]);
+    setExpenseIds([...expenseIds, id]);
     if (!checked) {
-      setIsCheck(isCheck.filter((item) => item != id));
+      setExpenseIds(expenseIds.filter((item) => item != id));
     }
   }
 
@@ -66,7 +68,7 @@ const ExpenseTable: FC<ITable> = ({ expenses }) => {
                 <Checkbox
                   id={expense.id}
                   onCheckedChange={(e) => handleClick(e, expense.id)}
-                  checked={isCheck.includes(expense.id)}
+                  checked={expenseIds.includes(expense.id)}
                 />
               </TableCell>
               <TableCell>{idx + 1}</TableCell>
