@@ -1,5 +1,5 @@
 "use client";
-// TODO invalidation
+
 import { useState } from "react";
 import { Button } from "./ui/button";
 import {
@@ -36,7 +36,6 @@ const CreateWallet = () => {
       name,
       balance,
     });
-    // revalidatePath("/dashboard");
   }
 
   return (
