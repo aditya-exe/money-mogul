@@ -34,6 +34,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useRouter } from "next/navigation";
 
 interface ICreateExpense {
   walletId: string;
@@ -43,6 +44,7 @@ type ExpenseType = "add" | "sub";
 
 const CreateExpense: FC<ICreateExpense> = ({ walletId }) => {
   const utils = api.useUtils();
+  const router = useRouter();
   const [name, setName] = useState<string>("");
   const [amount, setAmount] = useState<number>(0);
   const [type, setType] = useState<string>("add");
@@ -54,6 +56,7 @@ const CreateExpense: FC<ICreateExpense> = ({ walletId }) => {
       setIsOpen(false);
       void utils.expense.getAll.invalidate();
       void utils.wallet.getById.invalidate();
+      router.refresh();
     },
   });
 

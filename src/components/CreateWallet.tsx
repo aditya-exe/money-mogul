@@ -16,19 +16,18 @@ import { Label } from "./ui/label";
 import { api } from "@/trpc/react";
 import { Icons } from "./Icons";
 import { toast } from "sonner";
-import { revalidatePath } from "next/cache";
+import {useRouter} from "next/navigation" 
 
 const CreateWallet = () => {
-  const utils = api.useUtils();
+  const router = useRouter();
   const [name, setName] = useState<string>("");
   const [balance, setBalance] = useState<number>(100);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { mutate, isPending } = api.wallet.create.useMutation({
     onSuccess: () => {
       toast("Wallet has been created");
-      void utils.wallet.getAll.invalidate();
       setIsOpen(false);
-      revalidatePath("/dashboard");
+      router.refresh();
     },
   });
 

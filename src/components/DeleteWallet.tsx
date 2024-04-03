@@ -14,16 +14,19 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface IDeleteWallet {
   walletId: string;
 }
 
 const DeleteWallet: FC<IDeleteWallet> = ({ walletId }) => {
+  const router = useRouter();
   const { mutate } = api.wallet.deleteById.useMutation({
     onSettled: () => {
-      redirect("/dashboard");
+      toast("Wallet Deleted");
+      router.replace("/dashboard");
     },
   });
 
@@ -38,7 +41,7 @@ const DeleteWallet: FC<IDeleteWallet> = ({ walletId }) => {
           Delete Wallet
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent>
+      <AlertDialogContent className="dark text-white">
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
