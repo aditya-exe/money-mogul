@@ -7,7 +7,6 @@ import { getServerAuthSession } from "@/server/auth";
 import { api } from "@/trpc/server";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import { Icon } from "@radix-ui/react-select";
 import { Icons } from "@/components/Icons";
 
 const Wallet = async ({ params }: { params: { walletId: string } }) => {
