@@ -6,6 +6,9 @@ import DeleteExpense from "@/components/DeleteExpense";
 import { getServerAuthSession } from "@/server/auth";
 import { api } from "@/trpc/server";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
+import { Icon } from "@radix-ui/react-select";
+import { Icons } from "@/components/Icons";
 
 const Wallet = async ({ params }: { params: { walletId: string } }) => {
   const session = await getServerAuthSession();
@@ -25,18 +28,20 @@ const Wallet = async ({ params }: { params: { walletId: string } }) => {
   return (
     <div className="flex h-screen flex-col bg-gray-900">
       <Navbar user={session.user} />
-      <div className="flex items-center justify-between p-8 text-lime-500">
-        <div className="flex items-center gap-x-4">
-          <h1 className="text-4xl font-bold italic">{wallet.name}</h1>
-          <DeleteWallet walletId={params.walletId} />
-          <CreateExpense walletId={params.walletId} />
+      <Suspense fallback={<Icons.loading className="animate-spin" />}>
+        <div className="flex items-center justify-between p-8 text-lime-500">
+          <div className="flex items-center gap-x-4">
+            <h1 className="text-4xl font-bold italic">{wallet.name}</h1>
+            <DeleteWallet walletId={params.walletId} />
+            <CreateExpense walletId={params.walletId} />
+          </div>
+          <div className="flex items-center gap-x-12">
+            <DeleteExpense />
+            <h1 className="text-4xl italic">{wallet.balance}</h1>
+          </div>
         </div>
-        <div className="flex items-center gap-x-12">
-          <DeleteExpense />
-          <h1 className="text-4xl italic">{wallet.balance}</h1>
-        </div>
-      </div>
-      <ExpenseTable expenses={expenses} />
+        <ExpenseTable expenses={expenses} />
+      </Suspense>
     </div>
   );
 };
